@@ -1,55 +1,6 @@
-#importonce
-
-.cpu _45gs02
-
-.macro job_copydata(source, dest, len) {
-        lda #0                  // call DMA controller to fill screen & charram
-        sta DMA_ADDRBANK
-        lda #>!fcm_dma+
-        sta DMA_ADDRMSB
-        lda #<!fcm_dma+
-        sta DMA_ADDRLSB_ETRIG   // trigger extended DMA job
-        bra !fcm_dma_end+       // branch over DMA job data
-
-!fcm_dma:
-        //copy character ram
-        .byte $0b, $00   // 11 mode and copy                 
-        .byte $00  // copy
-        .word len //len
-        .word [source & $ffff]
-        .byte [(source>>16) & $f]
-        .word [dest & $ffff]          // dest
-        .byte [(dest>>16) & $f]       // destbnk(0-3) + flags
-        .word $0000                     // modulo (ignored)
-!fcm_dma_end:
-}
 
 
-.macro job_filldata(dest, value, len) {
-
-        lda #0                  // call DMA controller to fill screen & charram
-        sta DMA_ADDRBANK
-        lda #>!fcm_dma+
-        sta DMA_ADDRMSB
-        lda #<!fcm_dma+
-        sta DMA_ADDRLSB_ETRIG   // trigger extended DMA job
-        bra !fcm_dma_end+       // branch over DMA job data
-
-!fcm_dma:
-        //fill dest with value step by 2 bytes
-        .byte $0a                       // 11 byte mode
-        .byte $85, $02                  // increment by 2
-        .byte $00                       // eol
-        .byte DMA_FILL                  // fill, chain next job
-        .word len
-        .word value                     // colour code to fill with, one byte
-        .byte $00                       // src bank (ignored)
-        .word [dest & $ffff]            // dest
-        .byte [(dest>>16) & $f]         // destbnk(0-3) + flags
-        .word $0000                     // modulo (ignored)
-!fcm_dma_end:
-}
-
+/*
 
 .macro inc_Y__Screen(bpbase) {
     .var screenOffs = bpbase+4
@@ -178,38 +129,6 @@ notnegative:
 
 
 
-.macro debug_msg (msg) {
-        ldx #0                          // text index
-!txtloop:
-        lda msg,x
-        beq !endloop+                   // zero terminated text
-        sta $D643
-        clv
-        inx
-        bra !txtloop-
-!endloop:
-        debug_print()
-}
-
-.macro debug_char (char) {
-
-        lda #char
-	sta $D643
-        debug_print()
-}
-
-.macro debug_print () {
-
-	clv
-        lda #$0d
-	sta $D643
-	clv
-	lda #$0a
-        sta $D643
-	clv
-	ldz #0
-}
-
 .macro read_joystick_ports (joy1, joy2){
 
         // Disable interrupts
@@ -284,25 +203,4 @@ loop:
 }
 
 
-//convert a negative number to its absolute value
-.macro absolute_value(num){
-        lda num                 // Carica il numero
-        bpl already_positive    // Salta se già positivo
-        eor #$ff                // Inverti tutti i bit
-        clc                     // Cancella il Carry
-        adc #$01                // Aggiungi 1
-        sta num                 // Salva il valore positivo
-
-already_positive:
-                                // Fine del programma
-}
-
-//convert a negative number to its absolute value
-//The new ptr is stored in X register
-.macro ptr_for_array_word(Contatore){
-    lda Contatore      // Carica il contatore (1-6) nel registro A
-    sec                // Imposta il Carry per la sottrazione
-    sbc #1             // Converti il contatore in 0-5 (0-indexed)
-    asl               // Moltiplica per 2 (ogni elemento è largo 2 byte)
-    tax                // Trasferisci il risultato nel registro X
-}
+*/

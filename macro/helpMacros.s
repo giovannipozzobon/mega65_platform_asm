@@ -315,3 +315,27 @@
 	sbc #[value >> 24] 
 	sta dst+3 
 }
+
+
+//convert a negative number to its absolute value
+.macro absolute_value(num){
+        lda num                 // Carica il numero
+        bpl already_positive    // Salta se già positivo
+        eor #$ff                // Inverti tutti i bit
+        clc                     // Cancella il Carry
+        adc #$01                // Aggiungi 1
+        sta num                 // Salva il valore positivo
+
+already_positive:
+                                // Fine del programma
+}
+
+//convert a negative number to its absolute value
+//The new ptr is stored in X register
+.macro ptr_for_array_word(Contatore){
+    lda Contatore      // Carica il contatore (1-6) nel registro A
+    sec                // Imposta il Carry per la sottrazione
+    sbc #1             // Converti il contatore in 0-5 (0-indexed)
+    asl               // Moltiplica per 2 (ogni elemento è largo 2 byte)
+    tax                // Trasferisci il risultato nel registro X
+}

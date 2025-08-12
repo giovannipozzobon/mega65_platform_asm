@@ -1,8 +1,10 @@
 
 .cpu _45gs02
 
-// Import memoryMap
+
+// Import System 
 #import "./system/memoryMap.s"
+#import "./system/config.s"
 
 // Import Costants 
 #import "./include/constants.asm"
@@ -30,16 +32,15 @@ Basic65Upstart()
 
 .align 64
 Chars:
-        .import binary "./sdcard/TestAseprite10_chr.bin"
-        //.import binary "./sdcard/Chars_gfx.bin"
+        //.import binary "./sdcard/TestAseprite10_chr.bin"
+        .import binary "./sdcard/Chars_gfx.bin"
         .print "Chars_end-Chars = " + toIntString(Chars_end-Chars)  
 Chars_end:
 
-
 .align 64
 Screen:
-        .import binary "./sdcard/job1_LV0L0_map.bin"
-        //.import binary "./sdcard/Screen_gfx.bin"
+        //.import binary "./sdcard/job1_LV0L0_map.bin"
+        .import binary "./sdcard/Screen_gfx.bin"
         .print "Screen_end-Screen = " + toIntString(Screen_end-Screen)  
 Screen_end:
 
