@@ -8,19 +8,23 @@ XEMU   = /Applications/Mega65/xmega65.app/Contents/MacOS/xmega65
 ETHLOAD   = etherload.osx
 M65FTP    = mega65_ftp.osx
 M65    = m65.osx
-
+PNG65=node ./build/aseparse65/png65.js
+LDTK65=node ./build/ldtk65/ldtk65.js
 
 LIBDIR = ./include
 ALLPRG = main.prg
 
 .PHONY: all clean
 
-all: $(ALLPRG)
+all: map $(ALLPRG)
 
 run: main.prg
 #	$(M65FTP)  $(ETHLOAD_IP_PARAM) -e -c"put dj.d81"
 #	$(ETHLOAD) $(ETHLOAD_IP_PARAM) -m dj.d81 -r runtime.raw
 	$(M65) -l /dev/cu.usbserial-B002YK9V -@main.prg@2001
+
+map:
+	$(LDTK65) --ncm --workdir "./asset/" --input "TestAseprite1.ldtk" --output "sdcard"
 
 xemu: main.prg
 	$(XEMU) -curskeyjoy -uartmon :4510 -prg main.prg

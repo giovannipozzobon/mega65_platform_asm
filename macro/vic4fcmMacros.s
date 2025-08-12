@@ -157,7 +157,7 @@
 //
 // Initialise FCM Screen 320x200
 //
-.macro FCM_ScreenOn(scrmem, gfxmem, colmem) {
+.macro FCM_ScreenOn(scrmem, colmem) {
         lda #(VICIII_SM_H640|VICIII_SM_V400)
         trb VICIII_SCRNMODE                   // clear H640 and V400 for 320x200
         lda VICIV_SCRNMODE
