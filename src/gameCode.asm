@@ -45,7 +45,7 @@ main:
 
     VIC4_SetNumCharacters(CHARS_WIDE)
 
-    VIC4_SetNumRows(CHARS_HIGH) 
+    VIC4_SetNumRows(NUM_ROWS) 
 
 
     VIC4_SetScreenPtr(Screen)

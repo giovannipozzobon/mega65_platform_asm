@@ -20,10 +20,10 @@
 // Figure out how many characters wide and high the visible area is
 //
 .const CHARS_WIDE = (SCREEN_WIDTH / 8)
-.const CHARS_HIGH = (SCREEN_HEIGHT / 8)
+.const NUM_ROWS = (SCREEN_HEIGHT / 8)
 .const NR_BYTE_ROW = CHARS_WIDE * 2
 .print "NR_BYTE_ROW: " + toIntString(NR_BYTE_ROW)  
-.const NR_BYTE_SCREEN = CHARS_WIDE * CHARS_HIGH * 2 // 2 bytes for every char
+.const NR_BYTE_SCREEN = CHARS_WIDE * NUM_ROWS * 2 // 2 bytes for every char
 .print "NR_BYTE_SCREEN: " + toIntString(NR_BYTE_SCREEN)  
 
 
@@ -36,4 +36,4 @@
 // LOGICAL_ROW_SIZE is the number of bytes the VIC-IV advances each row
 //
 .const LOGICAL_ROW_SIZE = CHARS_WIDE * NUM_SCREENS_WIDE
-.const LOGICAL_NUM_ROWS = CHARS_HIGH * NUM_SCREENS_HIGH
+.const LOGICAL_NUM_ROWS = NUM_ROWS * NUM_SCREENS_HIGH
