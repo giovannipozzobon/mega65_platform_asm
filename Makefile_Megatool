@@ -1,0 +1,85 @@
+
+APPNAME=main
+DISKNAME=PLATFORM.D81
+
+RM    = rm
+JAVA  = /usr/bin/java
+KSJAR = /Applications/KickAssembler/KickAss65CE02-5.25.jar
+KS    = $(JAVA) -jar $(KSJAR)
+C1541 = c1541
+MEGATOOL=./build/megatool/macmegatool.exe
+XEMU   = /Applications/Mega65/xmega65.app/Contents/MacOS/xmega65
+ETHLOAD   = etherload.osx
+ETHERLOAD_ARGS=-r -m $(DISKNAME) bin/$(APPNAME).prg.addr.mc
+M65FTP    = mega65_ftp.osx
+EMEGA65_FTP_ARGS=-e -F -c "put $(DISKNAME)" -c "quit"
+M65    = m65.osx
+PNG65=node ./build/aseparse65/png65.js
+LDTK65=node ./build/ldtk65/ldtk65.js
+
+LIBDIR = ./include
+ALLPRG = main.prg
+
+.PHONY: all clean
+
+#all: map $(ALLPRG)
+all: map datablobs code disk
+
+disk: 
+	$(C1541) -format "jobond platform 65,0" d81 $(DISKNAME)
+#	$(C1541) -attach $(DISKNAME) 8 -write bin/$(APPNAME).prg.addr.mc "jobond's platform game"
+	$(C1541) -attach $(DISKNAME) 8 -write bin/$(APPNAME).prg "jobond's platform game"
+	$(C1541) -attach $(DISKNAME) 8 -write sdcard/data.bin.addr.mc "fs-iffl0"
+
+datablobs:
+	$(MEGATOOL) -p 00000100 \
+		sdcard/TestAseprite10_chr.bin \
+		sdcard/TestAseprite11_chr.bin \
+		sdcard/data.bin
+
+	$(MEGATOOL) -a sdcard/data.bin 00000000
+
+	$(MEGATOOL) -c sdcard/data.bin.addr
+
+
+code:
+	$(KS) -vicesymbols -showmem -odir bin $(APPNAME).asm
+#	$(MEGATOOL) -a bin/$(APPNAME).prg 00002000
+#	$(MEGATOOL) -c -e 00002000 bin/$(APPNAME).prg.addr
+
+map:
+	$(LDTK65) --ncm --workdir "./asset/" --input "TestAseprite1.ldtk" --output "sdcard"
+	
+run: all
+	$(XEMU) -autoload -8 $(DISKNAME) -uartmon :4510 -videostd 1
+
+
+push: all
+	$(MEGA65_FTP) -F -l $(JTAG) -c "put $(DISKNAME)" -c "quit"
+
+eth: all
+	$(EMEGA65_FTP) $(EMEGA65_FTP_ARGS)
+	$(ETHERLOAD) $(ETHERLOAD_ARGS)
+
+qq: all
+	$(ETHERLOAD) $(ETHERLOAD_ARGS)
+
+ethrun: all
+	$(EMEGA65_FTP) $(EMEGA65_FTP_ARGS)
+	$(ETHERLOAD) $(ETHERLOAD_ARGS)
+
+clean:
+# remove all generated files
+	$(RM) -f *.lst *.log *.sym $(ALLPRG)
+	$(RM) -f bin/*
+	$(RM) -f sdcard/*
+	$(RM) -f *.D81
+	$(RM) -f *.addr
+	$(RM) -f *.addr.mc
+
+%.prg: %.asm #$(LIBDIR)/*.asm
+	@echo "Deleting file $*.asm"
+	$(RM) -f *.lst *.log *.sym $(ALLPRG)
+	@echo "Assembling $*.asm"
+	#$(KS) -libdir $(LIBDIR) $*.asm -log $*.log -symbolfile  -bytedumpfile $*.klist 2> /dev/null 
+	$(KS) $*.asm -log $*.log -symbolfile  -bytedumpfile $*.klist 2> /dev/null 
