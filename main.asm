@@ -15,6 +15,7 @@
 // BASIC Boilerplate
 Basic65Upstart()
 
+//VIC4_StoreState(thebase)
 
 // *=GAME_CODE "Game Code"
 #import "./src/gameCode.asm"
@@ -23,7 +24,8 @@ Basic65Upstart()
 // *=LIBRARIES_ADDRESS "Libraries"
 #import "./include/libraries.asm"
 
-
+loop:
+        jmp loop
 
 //
 // ************* Binary Space **************

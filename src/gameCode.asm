@@ -7,26 +7,26 @@ main:
     jsr SYSTEM.setup
 
 
-        lda #DEFAULT_SCREEN_BORDER_COLOR
-        sta VICIV_BORDERCOL
-        sta VICIV_SCREENCOL             // black background and border
+    lda #DEFAULT_SCREEN_BORDER_COLOR
+    sta VICIV_BORDERCOL
+    sta VICIV_SCREENCOL             // black background and border
 
- 
-        //corretto
-        FCM_InitScreenMemory(0, SCREENMEM, GRAPHMEM, 0, COLORRAM, 11)
 
-        //corretto
-        FCM_ScreenOn(SCREENMEM, COLORRAM)
-        
-        //Copy Char
-        .print "char - Chars = " + toIntString(Chars_end-Chars)  
-        copydata(Chars, GRAPHMEM, Chars_end-Chars)
+    //corretto
+    FCM_InitScreenMemory(0, SCREENMEM, GRAPHMEM, 0, COLORRAM, 11)
 
-        //Copy Screen 1
-        copydata(Screen, SCREENMEM, Screen_end-Screen)
+    //corretto
+    FCM_ScreenOn(SCREENMEM, COLORRAM)
+    
+    //Copy Char
+    .print "char - Chars = " + toIntString(Chars_end-Chars)  
+    copydata(Chars, GRAPHMEM, Chars_end-Chars)
 
-        //Fill the High byte of screen 1 to $10 ($1000 that is GRAPHMEM/64) step 2 byte
-        filldata(SCREENMEM+1, $10, Screen_end-Screen)
+    //Copy Screen 1
+    copydata(Screen, SCREENMEM, Screen_end-Screen)
+
+    //Fill the High byte of screen 1 to $10 ($1000 that is GRAPHMEM/64) step 2 byte
+    filldata(SCREENMEM+1, $10, Screen_end-Screen)
 
 /*
     jsr SYSTEM.initialization2
