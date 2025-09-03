@@ -1,5 +1,13 @@
 {
     "[m68k]": {
         "editor.rulers": []
-    }
+    },
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/.DS_Store": true,
+        "**/Thumbs.db": false
+    },
+    "explorerExclude.backup": {}
 }

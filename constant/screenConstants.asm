@@ -1,7 +1,12 @@
 #importonce
 
 // ----------------------------------- SCREEN CONSTANTS -----------------------------------
+.const COLOR_OFFSET = $0800		// Offset ColorRam to make bank $10000 contiguous
+.const COLOR_RAM = $ff80000 + COLOR_OFFSET
+.const CHARS_RAM = $10000		// all bg chars / pixie data goes here
+.const MAP_RAM = $40000			// bg map data goes here
 
+.const SCREEN_RAM = $50000		// screen ram / pixie work ram goes here
 .const SCREENMEM = $50000 // this is screen ram
 .const GRAPHMEM  = $40000        // this is character ram (or graphic in this case)
 .const COLORRAM  = $ff81000      // this is in high ram $ff 8 1000

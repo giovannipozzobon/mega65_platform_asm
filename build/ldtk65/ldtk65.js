@@ -499,7 +499,7 @@ function saveChars(indx, chars) {
     let out = []
     for(var c = 0; c < chars.uniques.length; c++) {
         for(var i = 0; i < chars.uniques[c].data.length; i++) {
-            out.push(chars.uniques[c].data[i])
+            out.push(chars.uniques[c].data[i])    
         }
     }
     fs.writeFileSync(filename, Buffer.from(out))

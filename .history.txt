@@ -1,0 +1,2 @@
+seam[0][0]
+seam[0][0].char_number=0

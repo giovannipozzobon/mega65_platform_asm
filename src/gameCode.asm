@@ -6,7 +6,7 @@ main:
 	// Setup the system Mega65
     jsr SYSTEM.setup
 
-
+/*
     lda #DEFAULT_SCREEN_BORDER_COLOR
     sta VICIV_BORDERCOL
     sta VICIV_SCREENCOL             // black background and border
@@ -27,18 +27,18 @@ main:
 
     //Fill the High byte of screen 1 to $10 ($1000 that is GRAPHMEM/64) step 2 byte
     filldata(SCREENMEM+1, $10, Screen_end-Screen)
+*/
 
-/*
     jsr SYSTEM.initialization2
 
-
-        lda #(VICIII_SM_H640|VICIII_SM_V400)
-        trb VICIII_SCRNMODE                   // clear H640 and V400 for 320x200
-        lda VICIV_SCRNMODE
-        ora #(VICIV_SM_FCLRHI|VICIV_SM_CHR16) // set FCLRHI + CHR16 
-        and #(~VIVIV_SM_FCLRLO)               // clear FCLRLO for super extended attr mode
-        sta VICIV_SCRNMODE
-
+/*
+    lda #(VICIII_SM_H640|VICIII_SM_V400)
+    trb VICIII_SCRNMODE                   // clear H640 and V400 for 320x200
+    lda VICIV_SCRNMODE
+    ora #(VICIV_SM_FCLRHI|VICIV_SM_CHR16) // set FCLRHI + CHR16 
+    and #(~VIVIV_SM_FCLRLO)               // clear FCLRLO for super extended attr mode
+    sta VICIV_SCRNMODE
+*/
 
     // Setup the system
     VIC4_SetRowWidth(NR_BYTE_ROW) 
@@ -52,11 +52,7 @@ main:
 
     VIC4_SetCharPtr(Chars)
 
-*/
-
-
-
-    rts
+    //rts
 
 gameloop:
 
