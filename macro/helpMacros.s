@@ -79,6 +79,13 @@
 	sta dst+1
 }
 
+//Double the number
+.macro _double16(srcdst)
+{
+	asl srcdst+0
+	rol srcdst+1
+}
+
 // _add16im - add a 16bit constant to a memory location, store in result
 .macro _add16im(src, value, dst)
 {

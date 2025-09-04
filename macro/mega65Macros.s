@@ -10,6 +10,7 @@
  * and starts segment Main with label main right after this
  */
 .macro Basic65Upstart() {
+        .segment Code "Main Code"
         * = $2001 "BASIC Upstart"
 
         .encoding "petscii_upper"

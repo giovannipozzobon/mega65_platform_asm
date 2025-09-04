@@ -1,7 +1,7 @@
 .cpu _45gs02
+.segment Code "Entry"
 
-
-main:
+Entry:
 
 	// Setup the system Mega65
     jsr SYSTEM.setup
@@ -31,14 +31,14 @@ main:
 
     jsr SYSTEM.initialization2
 
-/*
+
     lda #(VICIII_SM_H640|VICIII_SM_V400)
     trb VICIII_SCRNMODE                   // clear H640 and V400 for 320x200
     lda VICIV_SCRNMODE
     ora #(VICIV_SM_FCLRHI|VICIV_SM_CHR16) // set FCLRHI + CHR16 
     and #(~VIVIV_SM_FCLRLO)               // clear FCLRLO for super extended attr mode
     sta VICIV_SCRNMODE
-*/
+
 
     // Setup the system
     VIC4_SetRowWidth(NR_BYTE_ROW) 
@@ -47,12 +47,20 @@ main:
 
     VIC4_SetNumRows(NUM_ROWS) 
 
+	// Initialize palette and bgmap data
+	jsr InitPalette
+	jsr InitBGMap
 
-    VIC4_SetScreenPtr(Screen)
+    //Copy Screen 
+    copydata(MapTileRAM, SCREEN_RAM, MapTileRAM_end-MapTileRAM)
+
+    //Copy Attrib 1
+    copydata(MapAttribRAM, COLOR_RAM, MapAttribRAM_end-MapAttribRAM)
 
     VIC4_SetCharPtr(Chars)
 
-    //rts
+    VIC4_SetScreenPtr(SCREEN_RAM)
+
 
 gameloop:
 
@@ -60,4 +68,4 @@ gameloop:
         
 
     // return to basic
-    jsr SYSTEM.returnToBasic
+    //jsr SYSTEM.returnToBasic

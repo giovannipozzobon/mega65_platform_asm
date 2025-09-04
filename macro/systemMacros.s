@@ -2,8 +2,10 @@
 // ------------------------------------------------------------
 //
 .macro BasicUpstart65(addr) {
+	.segment Code "Main Code"
 	*=BASIC65UPSTART "BASIC Upstart"
 
+	.print "Address Main Code = " + toHexString(addr)
 	.var addrStr = toIntString(addr)
 
 	.byte $09,$20 //End of command marker (first byte after the 00 terminator)
